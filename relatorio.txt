@@ -1,0 +1,63 @@
+A base de dados utilizada foi baixada do site do Kaggle, no endereço https://www.kaggle.com/code/mariapushkareva/medical-insurance-cost-with-linear-regression/input
+A base de dados é semelhante à proposta, com as diferenças de que as colunas estão em inglês e possui pouco mais de 1300 registros.
+
+
+A base possui colunas textuais que necessitaram conversão. As colunas de sex(gênero) e smoker(fumante) foram convertidas utilizando Label Encoder, já a coluna da region(região) foi convertida utilizando One Hot Encoding, por possuir 4 valores distintos possíveis, com a função get_dummies. A base não possui falta de valores ou campos nulos.
+
+
+Os dados foram analisados com a utilização de gráficos histogramas, correlação e boxplot. À partir dos plots foi possível constatar:
+- Há 3 variáveis com correlação interessante em relação à target, sendo elas age(idade), bmi(imc) e smoker(fumante).
+- As demais variáveis, sendo elas sex(gênero), children(filhos) e region(região) foram descartadas do modelo por não possuírem correlação relevante com a variável target, e assim influenciarem negativamente no modelo.
+- Vale ressaltar que, normalmente, a quantidade de filhos como dependentes deveria ter uma correlação maior com o preço, mas não parece ser o caso desta base de dados.
+- A base de dados possui outliers, tanto no preço(target/charges) quanto na feature bmi(imc).
+- Foi realizada a remoção de ouliers em ambas colunas, mas, esta remoção de outliers parece não ter afetado de forma relevante os modelos testados, então os outliers foram mantidos no modelo.
+
+
+Os dados foram escalonados utilizando ambos os métodos, Standard Scaler e MinMax Scaler, mas a forma original dos dados também foi mantida para teste nos modelos.
+
+
+Foram treinados e avaliados 4 modelos diferentes de regressão para o caso, sendo eles:
+- Regressão Linear
+- Decision Tree Regressor
+- KNeighbours Regressor
+- Gamma Regressor
+Cada um dos modelos foi executado manualmente seguidas vezes com diferentes hiper-parâmetros, para que se localizasse a melhor combinação possível.
+RESULTADOS E INSIGHTS POR MODELO
+
+* O modelo Regressão Linear não exibiu melhoras significativas com o escalonamento dos dados, então para ele foram mantidos os dados originais. O resultado com a execução deste modelo não foi satisfatório.
+Erro Absoluto Médio: 4260.560091099391
+R² (coeficiente de determinação): 0.7776932310583375
+MAPE (Mean Absolute Percentage Error): 49.57049147958805
+
+* O modelo Decision Tree Regressor variou bastante com os hiper-parâmetros, mas com ajustes chegou a uma performance satisfatória, performando muito superior a Regressão Linear. Este modelo teve melhor desempenho utilizando os dados escalonados com o MinMax Scaler.
+Erro Absoluto Médio: 1959.2274265261194
+R² (coeficiente de determinação): 0.8644262093478122
+MAPE (Mean Absolute Percentage Error): 16.22264254634928
+
+* O modelo KNeighbours Regressor performou melhor que a Regressão Linear, mas não chegou aos resultados obtidos com o modelo de Decision Tree, poderia ser utilizado, caso não houvesse o Decision Tree à disposição. Este modelo também obteve melhores resultados utilizando os dados escalonados com o MinMax Scaler.
+Erro Absoluto Médio: 2600.301980630597
+R² (coeficiente de determinação): 0.8645560689263039
+MAPE (Mean Absolute Percentage Error): 38.09609970356126
+
+* O modelo Gamma Regressor performou de maneira não satisfatória para o caso, com resultados bem semelhantes ao modelo de Regressão Linear. Este modelo teve melhor desempenho utilizando os dados escalonados com o Standard Scaler.
+Erro Absoluto Médio: 4129.0440522303525
+R² (coeficiente de determinação): 0.723729961290243
+MAPE (Mean Absolute Percentage Error): 49.415416983489514
+
+
+VALIDAÇÃO CRUZADA
+Foi executada a validação cruzada com os 4 modelos, utilizando-se do kfold com 10 splits.
+O resultado aqui confirma a superioridade do Decision Tree Regressor para este caso:
+O melhor modelo é DecisionTree com o valor de 0.8388.
+
+
+Foram plotados os gráficos de valores residuais e valores reais vs valores preditos, com base no modelo de Decision Tree, que obteve os melhores resultados.
+- No caso dos valores reais vs preditos, a maioria dos dados teve considerável proximidade, mas alguns valores ficaram bem separados dos demais.
+- No caso dos valores residuais, a maioria foi mantida próxima da linha ideal(zero), mas, também houve alguns valores com grande diferença, distantes do ideal.
+
+
+
+
+
+
+
